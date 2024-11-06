@@ -1,0 +1,48 @@
+services:
+  localhost.localstack.cloud:
+    image: localstack/localstack-pro
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./aws.entrypoint.sh:/etc/localstack/init/ready.d/localstack.bootstrap.sh
+    environment:
+      HOST_PWD: ${PWD-}
+      LOCALSTACK_AUTH_TOKEN: ${LOCALSTACK_AUTH_TOKEN- }
+    networks:
+      net:
+        ipv4_address: 10.0.1.20
+
+  function:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    user: "${UID}:${GID}"
+    environment:
+      HOME: /tmp
+      NODE_ENV: development
+      NODE_OPTIONS: --enable-source-maps
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      CI: 1
+      TF_IN_AUTOMATION: 1
+      FORCE_COLOR: 0
+      TF_CLI_ARGS: -no-color
+      DISABLE_VERSION_CHECK: 1
+      TF_DATA_DIR: /tmp/terraform
+      CDKTF_HOME: /tmp
+      CDKTF_OUTDIR: /tmp/cdktf.out
+      TF_LOG: INFO
+      CDKTF_LOG_LEVEL: all
+    volumes:
+      - .:/app
+    networks:
+      net:
+    dns:
+      - 10.0.1.20
+      - 1.1.1.1
+
+networks:
+  net:
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24

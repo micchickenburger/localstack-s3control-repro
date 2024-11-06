@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "app": "true",
+  "projectId": "72444c14-916f-4eb4-b593-f48ca793c9e2",
+  "output": "/tmp/cdktf.out",
+  "codeMakerOutput": ".gen",
+  "sendCrashReports": "false",
+  "terraformProviders": [],
+  "terraformModules": [],
+  "context": {
+    "excludeStackIdFromLogicalIds": "true",
+    "allowSepCharsInLogicalIds": "true"
+  }
+}
